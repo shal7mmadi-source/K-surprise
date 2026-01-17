@@ -269,13 +269,15 @@
       <!-- PAGE 3: Funny -->
       <section id="pageFunny" class="hidden">
         <h1>Official birthday announcement 😂</h1>
+        <div class="hint">
+          <strong>To: K</strong><br><br>I don't say it often, but you are my greatest supporter, my healer, my best friend, and my comfort.<br><br>
+          I'm truly grateful to have you in my life. You are a blessing in my life.<br><br>
+          I love you more than you know ❤️‍🔥
+        </div>
+        <div class="hint" id="summaryHint" style="margin-top:12px;">
+          Your choices will appear here 😄
+        </div>
 
-       <div class="hint" id="summaryHint">
-         <strong>To: K</strong><br><br>
-         I don't say it often, but you are my greatest supporter, my healer, my best friend, and my comfort. <br><br>
-         I'm truly grateful to have you in my life. You are a blessing in my life. <br><br>
-         I love you more than you know ❤️‍🔥
-       </div>
 
         <div class="meme" aria-label="meme" style="margin-top:12px;">
           <div class="memeTop">WHEN IT’S YOUR BIRTHDAY IN UAE</div>
@@ -411,15 +413,16 @@
 
     document.getElementById("sendAgain").addEventListener("click", sendResults);
 
-    function updateFunnySummary() {
-      const services = getSelectedServices();
-      const hint = document.getElementById("summaryHint");
-      if (services.length === 0) {
-        hint.textContent = "You didn’t pick anything yet 😄 Go back and choose up to 3 services!";
-      } else {
-        hint.textContent = "Saved: " + services.join(" + ") + " 💖 Now go get spoiled properly.";
-      }
-    }
+function updateFunnySummary() {
+  const services = getSelectedServices();
+  const hint = document.getElementById("summaryHint");
+  if (services.length === 0) {
+    hint.textContent = "You didn’t pick anything yet 😄 Go back and choose up to 3 services!";
+  } else {
+    hint.textContent = "Saved: " + services.join(" + ") + " 💖 Now go get spoiled properly.";
+  }
+}
+
   </script>
 </body>
 </html>
