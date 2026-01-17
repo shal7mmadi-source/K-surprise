@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Birthday Salon Gift 🎁</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body { margin: 0; background: #f6f6f8; color: #111; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 24px; }
+    .card { background: #fff; border-radius: 18px; padding: 18px; box-shadow: 0 10px 30px rgba(0,0,0,.07); }
+    .pill { display:inline-block; padding: 6px 10px; border-radius: 999px; background:#efeff6; font-size: 12px; color:#222; }
+    h1 { margin: 10px 0 8px; font-size: 24px; }
+    p { margin: 0 0 14px; color: #444; line-height: 1.45; }
+    .hidden { display: none; }
+
+    /* Surprise page */
+    .center { display:flex; flex-direction: column; align-items:center; text-align:center; gap: 12px; padding: 10px 0 4px; }
+    .gift {
+      width: 175px; height: 175px; border-radius: 26px;
+      display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(135deg, #111, #3a3a3a);
+      cursor: pointer; user-select:none;
+      box-shadow: 0 18px 40px rgba(0,0,0,.18);
+      transform: translateY(0);
+      transition: transform .12s ease, box-shadow .12s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .gift:hover { transform: translateY(-2px); box-shadow: 0 22px 50px rgba(0,0,0,.22); }
+    .gift:active { transform: translateY(1px) scale(.99); }
+    .gift .emoji { font-size: 72px; filter: drop-shadow(0 6px 12px rgba(0,0,0,.25)); }
+    .gift .sparkle {
+      position:absolute; inset:-40px; opacity:.35;
+      background: radial-gradient(circle at 30% 30%, #fff, transparent 35%),
+                  radial-gradient(circle at 70% 50%, #fff, transparent 38%),
+                  radial-gradient(circle at 45% 80%, #fff, transparent 40%);
+      animation: shimmer 2.4s infinite linear;
+    }
+    @keyframes shimmer { from { transform: translateX(-10px) rotate(0deg); } to { transform: translateX(10px) rotate(12deg); } }
+
+    /* Services page */
+    .row { display:flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; align-items:center; }
+    .counter { font-size: 12px; color: #333; background:#efeff6; padding: 6px 10px; border-radius: 999px; }
+    .grid { display: grid; gap: 10px; margin: 14px 0; }
+    .sectionTitle { margin: 18px 0 8px; font-weight: 900; color:#111; }
+    label.opt {
+      display:flex; gap:10px; align-items:flex-start;
+      padding:12px; border:1px solid #e6e6ee; border-radius: 14px;
+      cursor: pointer; background:#fff;
+    }
+    label.opt:hover { border-color:#cfcfe6; background:#fafafe; }
+    input[type="checkbox"] { margin-top: 4px; width: 18px; height: 18px; }
+    .service { font-weight: 800; }
+    .meta { color:#555; font-size: 13px; margin-top: 2px; }
+    input[type="text"], textarea {
+      width: 100%; padding: 12px; border:1px solid #e6e6ee; border-radius: 12px; font-size: 14px;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+
+    button {
+      padding: 12px 14px; border: 0; border-radius: 12px;
+      font-weight: 900; cursor: pointer;
+    }
+    .primary { background:#111; color:#fff; }
+    .ghost { background:#efeff6; color:#111; }
+    .small { font-size: 12px; color: #666; margin-top: 10px; }
+
+    /* Funny page */
+    .meme {
+      border: 1px solid #e6e6ee; border-radius: 16px; overflow:hidden; background:#fff;
+    }
+    .memeTop, .memeBottom {
+      font-weight: 950; text-transform: uppercase; letter-spacing: .6px;
+      padding: 14px 14px; font-size: 16px;
+    }
+    .memeImg {
+      display:flex; align-items:center; justify-content:center;
+      min-height: 220px;
+      background: linear-gradient(135deg, #ffe3f2, #e6f0ff);
+      font-size: 68px;
+    }
+    .navRow { display:flex; gap:10px; flex-wrap: wrap; margin-top: 12px; }
+    .hint { background:#fafafe; border:1px dashed #d8d8ee; border-radius: 14px; padding: 12px; color:#333; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <span class="pill">🎁 Birthday Gift Link</span>
+
+      <!-- PAGE 1: Surprise -->
+      <section id="pageSurprise">
+        <div class="center">
+          <h1>Tap for a surprise 💖</h1>
+          <p>Happy birthday sis! Click the gift to unlock your salon treat ✨</p>
+
+          <div class="gift" id="giftBox" role="button" aria-label="Open gift">
+            <div class="sparkle"></div>
+            <div class="emoji">🎁</div>
+          </div>
+
+          <p class="small">Warning: may cause happiness + glow-up.</p>
+        </div>
+      </section>
+
+      <!-- PAGE 2: Services -->
+      <section id="pageServices" class="hidden">
+        <h1>Choose up to 3 services ✨</h1>
+        <p>Pick what you want (max <b>3</b>). Then press <b>Done</b> to send your choices to me 💌</p>
+
+        <div class="row" style="justify-content: space-between;">
+          <span class="counter" id="pickCounter">0 / 3 selected</span>
+          <button type="button" class="ghost" id="backToSurprise">← Back</button>
+        </div>
+
+        <form id="serviceForm">
+
+          <div class="sectionTitle">Hair</div>
+          <div class="grid" id="optionsHair">
+            <label class="opt">
+              <input type="checkbox" name="service" value="Haircut">
+              <div><div class="service">Haircut</div><div class="meta">Full cut</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Hair Trim">
+              <div><div class="service">Hair Trim</div><div class="meta">Clean-up / ends</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Hairstyle">
+              <div><div class="service">Hairstyle</div><div class="meta">Blowdry, curls, waves, sleek</div></div>
+            </label>
+          </div>
+
+          <div class="sectionTitle">Hair Treatments</div>
+          <div class="grid" id="optionsTreatments">
+            <label class="opt">
+              <input type="checkbox" name="service" value="Hair Treatment — Detox Scalp Scrub">
+              <div><div class="service">Detox Scalp Scrub</div><div class="meta">Fresh scalp reset</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Hair Treatment — Coffee Scrub">
+              <div><div class="service">Coffee Scrub</div><div class="meta">Exfoliate + boost</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Hair Treatment — Organic Hair Treatment">
+              <div><div class="service">Organic Hair Treatment</div><div class="meta">Nourish + repair</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Hair Treatment — Milkshake">
+              <div><div class="service">Milkshake Treatment</div><div class="meta">Softness + shine</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Hair Treatment — K18">
+              <div><div class="service">K18 Treatment</div><div class="meta">Bond repair</div></div>
+            </label>
+          </div>
+
+          <div class="sectionTitle">Hair Color</div>
+          <div class="grid" id="optionsColor">
+            <label class="opt">
+              <input type="checkbox" name="service" value="Hair Color — Roots">
+              <div><div class="service">Hair Color (Roots)</div><div class="meta">Root touch-up</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Hair Color — Full">
+              <div><div class="service">Hair Color (Full)</div><div class="meta">All hair color</div></div>
+            </label>
+          </div>
+
+          <div class="sectionTitle">Highlights</div>
+          <div class="grid" id="optionsHighlights">
+            <label class="opt">
+              <input type="checkbox" name="service" value="Highlights — Highlight">
+              <div><div class="service">Highlight</div><div class="meta">Classic highlights</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Highlights — Balayage">
+              <div><div class="service">Balayage</div><div class="meta">Soft blended color</div></div>
+            </label>
+          </div>
+
+          <div class="sectionTitle">Nails</div>
+          <div class="grid" id="optionsNails">
+            <label class="opt">
+              <input type="checkbox" name="service" value="Manicure & Pedicure Combo">
+              <div><div class="service">Manicure & Pedicure Combo</div><div class="meta">Full combo</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Normal French">
+              <div><div class="service">Normal French</div><div class="meta">Classic French</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Normal Polish">
+              <div><div class="service">Normal Polish</div><div class="meta">Single color polish</div></div>
+            </label>
+          </div>
+
+          <div class="sectionTitle">Brows & Lashes</div>
+          <div class="grid" id="optionsLashes">
+            <label class="opt">
+              <input type="checkbox" name="service" value="Eyebrow Lifting">
+              <div><div class="service">Eyebrow Lifting</div><div class="meta">Lift + shape</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Eyelash Lifting">
+              <div><div class="service">Eyelash Lifting</div><div class="meta">Lift + curl</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Eyelash Extensions — Half-eye">
+              <div><div class="service">Eyelash Extensions (Half-eye)</div><div class="meta">Soft enhancement</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Eyelash Extensions — Natural / Classic">
+              <div><div class="service">Eyelash Extensions (Natural / Classic)</div><div class="meta">Everyday look</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Eyelash Extensions — Medium / Full">
+              <div><div class="service">Eyelash Extensions (Medium / Full)</div><div class="meta">More fullness</div></div>
+            </label>
+
+            <label class="opt">
+              <input type="checkbox" name="service" value="Eyelash Extensions — Volume / Dramatic">
+              <div><div class="service">Eyelash Extensions (Volume / Dramatic)</div><div class="meta">Big glam</div></div>
+            </label>
+          </div>
+
+          <div class="row">
+            <div style="flex:1; min-width: 220px;">
+              <input id="herName" type="text" placeholder="Your name (optional)">
+            </div>
+          </div>
+
+          <div style="margin-top:10px;">
+            <textarea id="notes" placeholder="Notes (preferred day/time, hair goal, color idea, etc.)"></textarea>
+          </div>
+
+          <div class="row" style="margin-top:12px;">
+            <button type="submit" class="primary">Done (send to me)</button>
+            <button type="button" id="nextBtn" class="ghost">Next →</button>
+            <button type="button" id="copyBtn" class="ghost">Copy message</button>
+          </div>
+
+          <div class="small">
+            UAE tip: “Done” opens WhatsApp to send your selection to me. If it doesn’t open, use “Copy message”.
+          </div>
+        </form>
+      </section>
+
+      <!-- PAGE 3: Funny -->
+      <section id="pageFunny" class="hidden">
+        <h1>Official birthday announcement 😂</h1>
+
+        <div class="hint" id="summaryHint">
+          Your choices are saved 💖 Now go get spoiled properly.
+        </div>
+
+        <div class="meme" aria-label="meme" style="margin-top:12px;">
+          <div class="memeTop">WHEN IT’S YOUR BIRTHDAY IN UAE</div>
+          <div class="memeImg">🛍️💅✨</div>
+          <div class="memeBottom">AND “JUST ONE THING” BECOMES 3 SERVICES</div>
+        </div>
+
+        <div class="navRow">
+          <button type="button" class="ghost" id="backToServices">← Back to services</button>
+          <button type="button" class="primary" id="sendAgain">Send my choice again</button>
+        </div>
+
+        <p class="small">If WhatsApp didn’t open earlier, tap “Send my choice again”.</p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    /**************
+     * CONFIG — set where YOU receive the results
+     **************/
+    // UAE WhatsApp format: 9715XXXXXXXX  (no +, no spaces)
+    const WHATSAPP_TO = "";   // مثال: "971501234567"
+    const EMAIL_TO = "";      // optional fallback
+
+    /**************
+     * Page navigation
+     **************/
+    const pageSurprise = document.getElementById("pageSurprise");
+    const pageServices = document.getElementById("pageServices");
+    const pageFunny = document.getElementById("pageFunny");
+
+    function show(page) {
+      [pageSurprise, pageServices, pageFunny].forEach(p => p.classList.add("hidden"));
+      page.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.getElementById("giftBox").addEventListener("click", () => show(pageServices));
+    document.getElementById("backToSurprise").addEventListener("click", () => show(pageSurprise));
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      updateFunnySummary();
+      show(pageFunny);
+    });
+    document.getElementById("backToServices").addEventListener("click", () => show(pageServices));
+
+    /**************
+     * Max 3 selections
+     **************/
+    const checkboxes = Array.from(document.querySelectorAll('input[name="service"]'));
+    const counter = document.getElementById("pickCounter");
+
+    function updateCounterAndLimit() {
+      const selected = checkboxes.filter(cb => cb.checked);
+      counter.textContent = `${selected.length} / 3 selected`;
+
+      if (selected.length >= 3) {
+        checkboxes.forEach(cb => { if (!cb.checked) cb.disabled = true; });
+      } else {
+        checkboxes.forEach(cb => cb.disabled = false);
+      }
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener("change", updateCounterAndLimit));
+    updateCounterAndLimit();
+
+    /**************
+     * Build message + send
+     **************/
+    function getSelectedServices() {
+      return checkboxes.filter(cb => cb.checked).map(cb => cb.value);
+    }
+
+    function buildMessage() {
+      const services = getSelectedServices();
+      const name = document.getElementById("herName").value.trim();
+      const notes = document.getElementById("notes").value.trim();
+
+      const lines = [];
+      lines.push("🎁 Birthday Salon Gift — Her Choices");
+      lines.push("");
+      lines.push("Services (" + services.length + " / 3):");
+      services.forEach(s => lines.push("• " + s));
+      if (name) lines.push("", "Name: " + name);
+      if (notes) lines.push("", "Notes:", notes);
+      lines.push("", "— Sent from the gift link 💖");
+      return lines.join("\n");
+    }
+
+    function openWhatsApp(message) {
+      const url = "https://wa.me/" + encodeURIComponent(WHATSAPP_TO) + "?text=" + encodeURIComponent(message);
+      window.open(url, "_blank");
+    }
+
+    function openEmail(message) {
+      const subject = "Birthday Salon Gift — Service Choices";
+      const url = "mailto:" + encodeURIComponent(EMAIL_TO) +
+        "?subject=" + encodeURIComponent(subject) +
+        "&body=" + encodeURIComponent(message);
+      window.location.href = url;
+    }
+
+    function sendResults() {
+      const services = getSelectedServices();
+      if (services.length === 0) {
+        alert("Pick at least 1 service 🙂 (max 3)");
+        return;
+      }
+      const message = buildMessage();
+
+      if (WHATSAPP_TO) openWhatsApp(message);
+      else if (EMAIL_TO) openEmail(message);
+      else {
+        navigator.clipboard.writeText(message);
+        alert("I copied the results. Now paste into WhatsApp and send.");
+      }
+    }
+
+    document.getElementById("serviceForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      sendResults();
+    });
+
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      const services = getSelectedServices();
+      if (services.length === 0) return alert("Pick at least 1 service first 🙂");
+      await navigator.clipboard.writeText(buildMessage());
+      alert("Copied!");
+    });
+
+    document.getElementById("sendAgain").addEventListener("click", sendResults);
+
+    function updateFunnySummary() {
+      const services = getSelectedServices();
+      const hint = document.getElementById("summaryHint");
+      if (services.length === 0) {
+        hint.textContent = "You didn’t pick anything yet 😄 Go back and choose up to 3 services!";
+      } else {
+        hint.textContent = "Saved: " + services.join(" + ") + " 💖 Now go get spoiled properly.";
+      }
+    }
+  </script>
+</body>
+</html>
