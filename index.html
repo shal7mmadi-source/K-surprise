@@ -11,8 +11,32 @@
     .card { background: #fff; border-radius: 18px; padding: 18px; box-shadow: 0 10px 30px rgba(0,0,0,.07); }
     .pill { display:inline-block; padding: 6px 10px; border-radius: 999px; background:#efeff6; font-size: 12px; color:#222; }
     h1 { margin: 10px 0 8px; font-size: 24px; }
+    h2 { margin: 10px 0 8px; font-size: 18px; }
     p { margin: 0 0 14px; color: #444; line-height: 1.45; }
     .hidden { display: none; }
+
+    /* Music player */
+    .player {
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 12px 0 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid #e6e6ee;
+    }
+    .playerLeft { display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
+    .playerTitle { font-weight: 900; font-size: 13px; color:#111; }
+    .playerHint { font-size: 12px; color:#555; }
+    .playerBtn { padding: 10px 12px; border-radius: 12px; border:0; font-weight: 900; cursor:pointer; background:#111; color:#fff; }
+    .playerBtn.secondary { background:#efeff6; color:#111; }
+    .player input[type="range"] { width: 140px; }
 
     /* Surprise page */
     .center { display:flex; flex-direction: column; align-items:center; text-align:center; gap: 12px; padding: 10px 0 4px; }
@@ -89,16 +113,38 @@
     <div class="card">
       <span class="pill">🎁 Birthday Gift</span>
 
+      <!-- Music Player (works across all 3 pages) -->
+      <div class="player">
+        <div class="playerLeft">
+          <button type="button" class="playerBtn" id="musicToggle">▶ Play music</button>
+          <button type="button" class="playerBtn secondary" id="musicRestart">↺ Restart</button>
+          <div>
+            <div class="playerTitle">Birthday vibes</div>
+            <div class="playerHint">Tap Play once (phones block autoplay)</div>
+          </div>
+        </div>
+
+        <div class="playerLeft">
+          <label class="playerHint" for="musicVol">Volume</label>
+          <input id="musicVol" type="range" min="0" max="1" step="0.01" value="0.6" />
+        </div>
+      </div>
+
+      <!-- Upload an mp3 to your repo named birthday-music.mp3 -->
+      <audio id="bgMusic" preload="auto" loop>
+        <source src="birthday-music.mp3" type="audio/mpeg" />
+      </audio>
+
       <!-- PAGE 1: Surprise -->
       <section id="pageSurprise">
         <div class="center">
-         
           <h1>Happy Birthday K 🎉</h1>
-          <p>On this beautiful day of your birth, I want you to remember that you are loved, cherished, and unique. <br>
-            You light up the world with your presence and bring joy to those around you. ✨</p>
+          <p>
+            On this beautiful day of your birth, I want you to remember that you are loved, cherished, and unique. <br>
+            You light up the world with your presence and bring joy to those around you. ✨
+          </p>
 
-           <h2>Tap for a surprise 💖</h2>
-
+          <h2>Tap for a surprise 💖</h2>
           <p>Click the gift to unlock your treat ✨</p>
 
           <div class="gift" id="giftBox" role="button" aria-label="Open gift">
@@ -121,9 +167,8 @@
         </div>
 
         <form id="serviceForm">
-
           <div class="sectionTitle">Hair</div>
-          <div class="grid" id="optionsHair">
+          <div class="grid">
             <label class="opt">
               <input type="checkbox" name="service" value="Haircut">
               <div><div class="service">Haircut</div><div class="meta">Full cut</div></div>
@@ -141,7 +186,7 @@
           </div>
 
           <div class="sectionTitle">Hair Treatments</div>
-          <div class="grid" id="optionsTreatments">
+          <div class="grid">
             <label class="opt">
               <input type="checkbox" name="service" value="Hair Treatment — Detox Scalp Scrub">
               <div><div class="service">Detox Scalp Scrub</div><div class="meta">Fresh scalp reset</div></div>
@@ -169,7 +214,7 @@
           </div>
 
           <div class="sectionTitle">Hair Color</div>
-          <div class="grid" id="optionsColor">
+          <div class="grid">
             <label class="opt">
               <input type="checkbox" name="service" value="Hair Color — Roots">
               <div><div class="service">Hair Color (Roots)</div><div class="meta">Root touch-up</div></div>
@@ -182,7 +227,7 @@
           </div>
 
           <div class="sectionTitle">Highlights</div>
-          <div class="grid" id="optionsHighlights">
+          <div class="grid">
             <label class="opt">
               <input type="checkbox" name="service" value="Highlights — Highlight">
               <div><div class="service">Highlight</div><div class="meta">Classic highlights</div></div>
@@ -195,7 +240,7 @@
           </div>
 
           <div class="sectionTitle">Nails</div>
-          <div class="grid" id="optionsNails">
+          <div class="grid">
             <label class="opt">
               <input type="checkbox" name="service" value="Manicure & Pedicure Combo">
               <div><div class="service">Manicure & Pedicure Combo</div><div class="meta">Full combo</div></div>
@@ -213,7 +258,7 @@
           </div>
 
           <div class="sectionTitle">Brows & Lashes</div>
-          <div class="grid" id="optionsLashes">
+          <div class="grid">
             <label class="opt">
               <input type="checkbox" name="service" value="Eyebrow Lifting">
               <div><div class="service">Eyebrow Lifting</div><div class="meta">Lift + shape</div></div>
@@ -245,11 +290,11 @@
             </label>
           </div>
 
-             <div class="row"></div>
-          <div class="grid" id="optionsSurprise">
+          <div class="sectionTitle">Surprise</div>
+          <div class="grid">
             <label class="opt">
-              <input type="checkbox" name="service" value="Surprise — Surprise">
-              <div><div class="service">Surprise Me</div><div class="meta"></div></div>
+              <input type="checkbox" name="service" value="Surprise Me">
+              <div><div class="service">Surprise Me</div><div class="meta">You choose for me 😄</div></div>
             </label>
           </div>
 
@@ -263,21 +308,24 @@
             <button type="button" id="copyBtn" class="ghost">Copy message</button>
           </div>
 
+          <p class="small">“Done” will open WhatsApp to send your choices. If WhatsApp doesn’t open, use “Copy message”.</p>
         </form>
       </section>
 
       <!-- PAGE 3: Funny -->
       <section id="pageFunny" class="hidden">
         <h1>Official birthday announcement 😂</h1>
+
         <div class="hint">
-          <strong>To: K</strong><br><br>I don't say it often, but you are my greatest supporter, my healer, my best friend, and my comfort.<br><br>
+          <strong>To: K</strong><br><br>
+          I don't say it often, but you are my greatest supporter, my healer, my best friend, and my comfort.<br><br>
           I'm truly grateful to have you in my life. You are a blessing in my life.<br><br>
           I love you more than you know ❤️‍🔥
         </div>
+
         <div class="hint" id="summaryHint" style="margin-top:12px;">
           Your choices will appear here 😄
         </div>
-
 
         <div class="meme" aria-label="meme" style="margin-top:12px;">
           <div class="memeTop">WHEN IT’S YOUR BIRTHDAY IN UAE</div>
@@ -297,11 +345,11 @@
 
   <script>
     /**************
-     * CONFIG — set where YOU receive the results
+     * CONFIG — where YOU receive the results
      **************/
     // UAE WhatsApp format: 9715XXXXXXXX  (no +, no spaces)
-    const WHATSAPP_TO = "971505766266";   // مثال: "971501234567"
-    const EMAIL_TO = "sh.al7mmadi@gmail.com";      // optional fallback
+    const WHATSAPP_TO = "971505766266";
+    const EMAIL_TO = "sh.al7mmadi@gmail.com"; // fallback
 
     /**************
      * Page navigation
@@ -353,7 +401,6 @@
 
     function buildMessage() {
       const services = getSelectedServices();
-      const name = document.getElementById("herName").value.trim();
       const notes = document.getElementById("notes").value.trim();
 
       const lines = [];
@@ -361,7 +408,6 @@
       lines.push("");
       lines.push("Services (" + services.length + " / 3):");
       services.forEach(s => lines.push("• " + s));
-      if (name) lines.push("", "Name: " + name);
       if (notes) lines.push("", "Notes:", notes);
       lines.push("", "— Sent from the gift link 💖");
       return lines.join("\n");
@@ -388,16 +434,12 @@
       }
       const message = buildMessage();
 
-  // ✅ Show confirmation alert
       alert("Your choices are saved 💖 Now go get spoiled properly.");
 
       if (WHATSAPP_TO) openWhatsApp(message);
       else if (EMAIL_TO) openEmail(message);
-      else {
-        navigator.clipboard.writeText(message);
-      }
+      else navigator.clipboard.writeText(message);
     }
-
 
     document.getElementById("serviceForm").addEventListener("submit", (e) => {
       e.preventDefault();
@@ -413,16 +455,74 @@
 
     document.getElementById("sendAgain").addEventListener("click", sendResults);
 
-function updateFunnySummary() {
-  const services = getSelectedServices();
-  const hint = document.getElementById("summaryHint");
-  if (services.length === 0) {
-    hint.textContent = "You didn’t pick anything yet 😄 Go back and choose up to 3 services!";
-  } else {
-    hint.textContent = "Saved: " + services.join(" + ") + " 💖 Now go get spoiled properly.";
-  }
-}
+    function updateFunnySummary() {
+      const services = getSelectedServices();
+      const hint = document.getElementById("summaryHint");
+      if (services.length === 0) {
+        hint.textContent = "You didn’t pick anything yet 😄 Go back and choose up to 3 services!";
+      } else {
+        hint.textContent = "Saved: " + services.join(" + ") + " 💖 Now go get spoiled properly.";
+      }
+    }
 
+    /**************
+     * Music (manual start, persists across pages)
+     **************/
+    const bgMusic = document.getElementById("bgMusic");
+    const musicToggle = document.getElementById("musicToggle");
+    const musicRestart = document.getElementById("musicRestart");
+    const musicVol = document.getElementById("musicVol");
+
+    const savedVol = localStorage.getItem("bgMusicVol");
+    if (savedVol !== null) {
+      bgMusic.volume = parseFloat(savedVol);
+      musicVol.value = savedVol;
+    } else {
+      bgMusic.volume = 0.6;
+    }
+    const savedPaused = localStorage.getItem("bgMusicPaused");
+    if (savedPaused === "true") updateMusicButton(false);
+    else if (savedPaused === "false") updateMusicButton(true);
+
+    function updateMusicButton(isPlaying) {
+      musicToggle.textContent = isPlaying ? "⏸ Pause music" : "▶ Play music";
+    }
+
+    async function tryPlay(silent=false) {
+      try {
+        await bgMusic.play();
+        updateMusicButton(true);
+        localStorage.setItem("bgMusicPaused", "false");
+      } catch (e) {
+        updateMusicButton(false);
+        localStorage.setItem("bgMusicPaused", "true");
+        if (!silent) alert("Tap Play to start the music 🎵 (your phone blocks autoplay)");
+      }
+    }
+
+    musicToggle.addEventListener("click", async () => {
+      if (bgMusic.paused) await tryPlay(false);
+      else {
+        bgMusic.pause();
+        updateMusicButton(false);
+        localStorage.setItem("bgMusicPaused", "true");
+      }
+    });
+
+    musicRestart.addEventListener("click", async () => {
+      bgMusic.currentTime = 0;
+      await tryPlay(true);
+    });
+
+    musicVol.addEventListener("input", () => {
+      bgMusic.volume = parseFloat(musicVol.value);
+      localStorage.setItem("bgMusicVol", String(bgMusic.volume));
+    });
+
+    // Soft-start music on first interaction (gift tap)
+    document.getElementById("giftBox").addEventListener("click", () => {
+      if (bgMusic.paused) tryPlay(true);
+    });
   </script>
 </body>
 </html>
