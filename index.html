@@ -296,7 +296,7 @@
      **************/
     // UAE WhatsApp format: 9715XXXXXXXX  (no +, no spaces)
     const WHATSAPP_TO = "971505766266";   // مثال: "971501234567"
-    const EMAIL_TO = "";      // optional fallback
+    const EMAIL_TO = "sh.al7mmadi@gmail.com";      // optional fallback
 
     /**************
      * Page navigation
@@ -383,13 +383,16 @@
       }
       const message = buildMessage();
 
+  // ✅ Show confirmation alert
+      alert("Your choices are saved 💖 Now go get spoiled properly.");
+
       if (WHATSAPP_TO) openWhatsApp(message);
       else if (EMAIL_TO) openEmail(message);
       else {
         navigator.clipboard.writeText(message);
-        alert("I copied the results. Now paste into WhatsApp and send.");
       }
     }
+
 
     document.getElementById("serviceForm").addEventListener("submit", (e) => {
       e.preventDefault();
